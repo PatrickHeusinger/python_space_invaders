@@ -37,6 +37,13 @@ class Game:
                         self.spaceship.move(-10)
 
             self.spaceship.update()
+            if len(self.spaceship.bullets) > 0:
+                for bullet in self.spaceship.bullets:
+                    if bullet.fired == True:
+                        bullet.update()
+                    else:
+                        self.spaceship.bullets.remove(bullet)
+
             pygame.display.update()
 
 class Spaceship:
@@ -50,7 +57,7 @@ class Spaceship:
 
     def fired(self):
         self.bullets.append(Bullet(self.game, self.x, self.y))
-        self.bullets[len(self.bullets) - 1]
+        self.bullets[len(self.bullets) - 1].fire()
 
     def move(self, speed):
         self.change_x += speed
@@ -75,8 +82,13 @@ class Bullet:
     def fire(self):
         self.fired = True
 
-
+    def update(self):
+        self.y -= self.bullet_speed
+        if self.y <= 0:
+            self.fired = False
+        self.game.screen.blit(self.bullet_img, (self.x, self.y))
 
 
 if __name__ == "__main__":
     game = Game(800, 600)
+    print(len(game.spaceship.bullets))
