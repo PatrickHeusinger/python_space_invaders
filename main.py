@@ -27,6 +27,8 @@ class Game:
                         self.spaceship.move(-10)
                     if event.key == pygame.K_RIGHT:
                         self.spaceship.move(10)
+                    if event.key == pygame.K_SPACE:
+                        self.spaceship.fired()
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_LEFT:
@@ -44,13 +46,36 @@ class Spaceship:
         self.change_x = 0
         self.game = game
         self.spaceship_img = pygame.image.load("spaceship.png")
+        self.bullets = []
+
+    def fired(self):
+        self.bullets.append(Bullet(self.game, self.x, self.y))
+        self.bullets[len(self.bullets) - 1]
 
     def move(self, speed):
         self.change_x += speed
 
     def update(self):
         self.x += self.change_x
+        if self.x < 0:
+            self.x = 0
+        elif self.x > 736:
+            self.x = 736
         self.game.screen.blit(self.spaceship_img, (self.x, self.y))
+
+class Bullet:
+    def __init__(self, game, x, y):
+        self.x = x
+        self.y = y
+        self.game = game
+        self.fired = False
+        self.bullet_speed = 10
+        self.bullet_img = pygame.image.load("fire.png")
+
+    def fire(self):
+        self.fired = True
+
+
 
 
 if __name__ == "__main__":
