@@ -13,6 +13,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.spaceship = Spaceship(self, 370, 515)
+        self.score = 0
 
         self.enemies = []
         for i in range(12):
@@ -58,8 +59,13 @@ class Game:
                         i.y = 1000
                         self.game_over()
                     break
-
+            self.print_score()
             pygame.display.update()
+
+    def print_score(self):
+        score = pygame.font.Font("freesansbold.ttf", 24)
+        score_text = score.render("Score : " + str(self.score), True, (255, 255, 255))
+        self.screen.blit(score_text, (8, 8))
 
     def game_over(self):
         over = pygame.font.Font("freesansbold.ttf", 64)
@@ -122,6 +128,7 @@ class Enemy:
             distance = math.sqrt(math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2))
             if distance < 35:
                 bullet.fired = False
+                self.game.score += 1
                 self.x = random.randint(0, 736)
                 self.y = random.randint(50, 150)
 
