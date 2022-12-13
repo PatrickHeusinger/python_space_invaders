@@ -53,8 +53,18 @@ class Game:
             for enemy in self.enemies:
                 enemy.update()
                 enemy.check_collision()
+                if enemy.y > 460:
+                    for i in self.enemies:
+                        i.y = 1000
+                        self.game_over()
+                    break
 
             pygame.display.update()
+
+    def game_over(self):
+        over = pygame.font.Font("freesansbold.ttf", 64)
+        over_text = over.render("GAME OVER", True, (255, 255, 255))
+        self.screen.blit(over_text, (200, 250))
 
 class Spaceship:
     def __init__(self, game, x, y):
